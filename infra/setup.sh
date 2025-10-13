@@ -18,5 +18,8 @@ echo "✅ Cluster and demo app are ready!"
 kubectl get pods -n ${NAMESPACE}
 kubectl get svc -n ${NAMESPACE}
 
+echo "Deploy envoy"
+
+
 kubectl port-forward deployment/frontend 8080:8080 -n ${NAMESPACE} &
 echo "🌐 Access the demo app at http://localhost:8080"

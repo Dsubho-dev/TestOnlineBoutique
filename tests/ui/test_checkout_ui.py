@@ -4,12 +4,10 @@ import pytest
 from tests.ui.pages.product_page import ShopPage
 from tests.ui.pages.checkout_page import CheckoutPage
 
-BASE_URL = "http://localhost:8080"
-
 @pytest.mark.ui
-def test_checkout_flow(driver):
+def test_checkout_flow(driver, base_url):
     """End-to-end UI test: Add product, proceed to checkout, place order."""
-    driver.get(BASE_URL)
+    driver.get(base_url)
 
     shop = ShopPage(driver)
     checkout = CheckoutPage(driver)

@@ -1,6 +1,7 @@
 # conftest.py
 import pytest
 import yaml
+import json
 from pathlib import Path
 import requests
 
@@ -11,6 +12,14 @@ def endpoints():
     config_path = Path(__file__).parent / "endpoints.yaml"
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
+
+
+@pytest.fixture(scope="session")
+def user_data():
+    """Load user test data from JSON file."""
+    data_path = Path(__file__).parent / "testdata" / "user_data.json"
+    with open(data_path, "r") as f:
+        return json.load(f)
 
 
 @pytest.fixture(scope="session")

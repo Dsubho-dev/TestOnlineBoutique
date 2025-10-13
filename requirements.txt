@@ -1,3 +1,6 @@
 pytest 
 requests
 PyYAML
+selenium
+webdriver-manager
+pytest-html

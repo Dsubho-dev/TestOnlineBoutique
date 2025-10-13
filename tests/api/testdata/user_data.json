@@ -1,0 +1,78 @@
+{
+  "valid_users": {
+    "default_user": {
+      "email": "test@example.com",
+      "street_address": "1600 Amphitheatre Parkway",
+      "zip_code": "94043",
+      "city": "Mountain View",
+      "state": "CA",
+      "country": "United States",
+      "credit_card_number": "4111111111111111",
+      "credit_card_expiration_month": 12,
+      "credit_card_expiration_year": 2025,
+      "credit_card_cvv": "123"
+    },
+    "international_user": {
+      "email": "international@example.com",
+      "street_address": "123 Main Street",
+      "zip_code": "SW1A 1AA",
+      "city": "London",
+      "state": "England",
+      "country": "United Kingdom",
+      "credit_card_number": "4111111111111111",
+      "credit_card_expiration_month": 6,
+      "credit_card_expiration_year": 2026,
+      "credit_card_cvv": "456"
+    },
+    "premium_user": {
+      "email": "premium@example.com",
+      "street_address": "789 Premium Ave",
+      "zip_code": "10001",
+      "city": "New York",
+      "state": "NY",
+      "country": "United States",
+      "credit_card_number": "5555555555554444",
+      "credit_card_expiration_month": 3,
+      "credit_card_expiration_year": 2027,
+      "credit_card_cvv": "789"
+    }
+  },
+  "invalid_users": {
+    "invalid_email": {
+      "email": "invalid-email",
+      "street_address": "123 Test St",
+      "zip_code": "12345",
+      "city": "Test City",
+      "state": "TS",
+      "country": "United States",
+      "credit_card_number": "4111111111111111",
+      "credit_card_expiration_month": 12,
+      "credit_card_expiration_year": 2025,
+      "credit_card_cvv": "123"
+    },
+    "expired_card": {
+      "email": "expired@example.com",
+      "street_address": "123 Test St",
+      "zip_code": "12345",
+      "city": "Test City",
+      "state": "TS",
+      "country": "United States",
+      "credit_card_number": "4111111111111111",
+      "credit_card_expiration_month": 12,
+      "credit_card_expiration_year": 2020,
+      "credit_card_cvv": "123"
+    },
+    "invalid_card": {
+      "email": "test@example.com",
+      "street_address": "123 Test St",
+      "zip_code": "12345",
+      "city": "Test City",
+      "state": "TS",
+      "country": "United States",
+      "credit_card_number": "1234567890123456",
+      "credit_card_expiration_month": 12,
+      "credit_card_expiration_year": 2025,
+      "credit_card_cvv": "123"
+    }
+  }
+}
