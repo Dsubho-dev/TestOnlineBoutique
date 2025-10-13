@@ -1,5 +1,5 @@
-cart: "http://localhost:7070/cart"
-empty_cart: "http://localhost:7070/cart/empty"
-catalog: "http://localhost:3550/product"         # productcatalogservice
-checkout: "http://localhost:5050/cart/checkout"  # checkoutservice
-currency: "http://localhost:7000/setCurrency"    # currencyservice
+cart: "http://localhost:8081/cart"
+empty_cart: "http://localhost:8081/cart/empty"
+catalog: "http://localhost:8081/product"         # productcatalogservice
+checkout: "http://localhost:8081/cart/checkout"  # checkoutservice
+currency: "http://localhost:8081/setCurrency"    # currencyservice

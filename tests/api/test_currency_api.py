@@ -1,5 +1,5 @@
 import pytest
-import requests
+import httpx
 
 @pytest.mark.usefixtures("endpoints")
 class TestCurrencyAPI:
@@ -8,5 +8,7 @@ class TestCurrencyAPI:
         payload = {
             "currency_code": "GBP"
         }
-        resp = requests.post(base, json=payload)
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        with httpx.Client(http2=True, follow_redirects=False) as client:
+            resp = client.post(base, data=payload, headers=headers)
         assert resp.status_code == 302, f"Unexpected {resp.text}"

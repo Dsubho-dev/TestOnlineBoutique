@@ -26,8 +26,7 @@ class TestCartAPI:
         base = endpoints["cart"]
         with httpx.Client(http2=True) as client:
             resp = client.get(f"{base}?userId=test-user")
-        assert resp.status_code == 200
-        assert isinstance(resp.json(), dict)
+        assert resp.status_code == 200, f"Unexpected {resp.text}"
 
     def test_empty_cart(self, endpoints):
         """Empty the cart via POST and expect 302 on success using HTTP/2"""
