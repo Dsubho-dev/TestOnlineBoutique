@@ -13,8 +13,8 @@ A comprehensive test framework to deploy and test microservices with both API an
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd TestOnlineBoutique-main
+git clone https://github.com/Dsubho-dev/TestOnlineBoutique.git
+cd TestOnlineBoutique
 ```
 
 ### 2. Create and Activate Virtual Environment
