@@ -21,22 +21,22 @@ cd "$ROOT_DIR/microservices-demo-main"
 for SERVICE in "${SERVICES[@]}"; do
   echo ""
   echo "🧪 Running coverage for $SERVICE ..."
-  
+
   SERVICE_DIR="src/$SERVICE"
   if [ ! -d "$SERVICE_DIR" ]; then
     echo "❌ Service directory $SERVICE_DIR not found, skipping..."
     continue
   fi
-  
+
   cd "$SERVICE_DIR"
-  
+
   # Check if go.mod exists
   if [ ! -f "go.mod" ]; then
     echo "❌ No go.mod found in $SERVICE_DIR, skipping..."
     cd "$ROOT_DIR/microservices-demo-main"
     continue
   fi
-  
+
   # Run tests with coverage
   echo "   Running: go test ./... -coverprofile=coverage.out -covermode=atomic"
   if go test ./... -coverprofile=coverage.out -covermode=atomic; then
@@ -49,7 +49,7 @@ for SERVICE in "${SERVICES[@]}"; do
   else
     echo "❌ Tests failed for $SERVICE"
   fi
-  
+
   cd "$ROOT_DIR/microservices-demo-main"
 done
 
