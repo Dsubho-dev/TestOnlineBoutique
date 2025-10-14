@@ -71,6 +71,15 @@ tests/
     └── env.yaml
 ```
 
+### Pre-requisite
+1. Port-forward the frontend service to access the application locally for running the tests
+
+```bash
+kubectl port-forward -n onlineboutique svc/frontend 8081:80
+```
+
+2. For UI tests make sure Chrome Driver and Chromium Browser are installed and compatible
+
 ### Running All Tests
 
 ```bash
@@ -87,6 +96,9 @@ pytest -v -l
 ### Running API Tests Only
 
 ```bash
+# Run with Makefile target
+make test-api
+
 # Run all API tests
 pytest -m api
 
@@ -100,6 +112,9 @@ pytest tests/api/test_cart_api.py::TestCartAPI::test_add_to_cart
 ### Running UI Tests Only
 
 ```bash
+# Run with Makefile target
+make test-ui
+
 # Run all UI tests
 pytest -m ui
 
@@ -109,6 +124,12 @@ pytest tests/ui/test_add_to_cart_ui.py
 # Run UI tests with browser visible (if headless mode is default)
 pytest -m ui --headless=false
 ```
+
+### Collect Golang coverage
+
+```bash
+# Run with Makefile target
+make go-coverage
 
 ### Advanced Test Execution
 
@@ -121,15 +142,6 @@ pytest --html=report.html --self-contained-html
 
 # Run tests with coverage report
 pytest --cov=tests --cov-report=html
-
-# Run tests excluding slow tests
-pytest -m "not slow"
-
-# Run only integration tests
-pytest -m integration
-
-# Run tests with custom timeout
-pytest --timeout=60
 ```
 
 ### Test Configuration
@@ -137,15 +149,12 @@ pytest --timeout=60
 The test configuration is managed through:
 
 - **pytest.ini**: Main pytest configuration including markers, test paths, and output settings
-- **env.yaml**: Environment-specific configuration (currently empty, can be customized)
 - **conftest.py**: Shared fixtures and test setup
 
 ### Available Test Markers
 
 - `api`: API tests
 - `ui`: UI tests  
-- `slow`: Slow-running tests
-- `integration`: Integration tests
 
 ### Troubleshooting
 
@@ -201,7 +210,3 @@ The project includes infrastructure setup scripts in the `infra/` directory for 
 2. Write tests for new functionality
 3. Ensure all tests pass: `pytest`
 4. Submit a pull request
-
-## License
-
-[Add your license information here]

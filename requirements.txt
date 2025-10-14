@@ -4,3 +4,4 @@ PyYAML
 selenium
 webdriver-manager
 pytest-html
+httpx[http2]
