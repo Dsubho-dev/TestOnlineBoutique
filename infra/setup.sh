@@ -3,6 +3,7 @@ set -euo pipefail
 
 CLUSTER_NAME="microservices-demo"
 CONFIG_FILE="infra/kind-cluster.yaml"
+ENVOY_CONFIG="infra/envoy-proxy.yaml"
 NAMESPACE="onlineboutique"
 
 echo "🚀 Creating Kind cluster '${CLUSTER_NAME}'..."
@@ -19,7 +20,7 @@ kubectl get pods -n ${NAMESPACE}
 kubectl get svc -n ${NAMESPACE}
 
 echo "Deploy envoy"
+kubectl apply -f ${ENVOY_CONFIG}
 
-
-kubectl port-forward deployment/frontend 8080:8080 -n ${NAMESPACE} &
-echo "🌐 Access the demo app at http://localhost:8080"
+echo "⏳ Waiting for deployments to be ready..."
+kubectl wait --for=condition=available --timeout=300s deployment --all -n ${NAMESPACE} || true
