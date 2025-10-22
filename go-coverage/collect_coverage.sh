@@ -110,12 +110,13 @@ done
 echo ""
 echo "📈 Coverage Summary:"
 echo "===================="
-cd "$COVERAGE_DIR"
 
 # Check if combined coverage file has content beyond the mode line
-if [ $(wc -l < results/combined_coverage.out) -gt 1 ]; then
-  go tool cover -func=results/combined_coverage.out 2>/dev/null || {
-    echo "⚠️  Could not generate combined coverage summary (likely due to generated code issues)"
+if [ $(wc -l < "$COVERAGE_DIR/results/combined_coverage.out") -gt 1 ]; then
+  # Run go tool cover from within a Go module context (use the first service directory)
+  cd "$ROOT_DIR/microservices-demo-main/src/checkoutservice"
+  go tool cover -func="$COVERAGE_DIR/results/combined_coverage.out" 2>/dev/null || {
+    echo "⚠️  Could not generate combined coverage summary (likely due to module path issues)"
     echo "✅ Individual service coverage data was collected successfully"
   }
 else
@@ -124,9 +125,27 @@ fi
 
 echo ""
 echo "📊 Generating HTML report..."
-if [ $(wc -l < results/combined_coverage.out) -gt 1 ]; then
-  go tool cover -html=results/combined_coverage.out -o results/combined_coverage.html 2>/dev/null || {
-    echo "⚠️  Could not generate combined HTML report"
+if [ $(wc -l < "$COVERAGE_DIR/results/combined_coverage.out") -gt 1 ]; then
+  # Run go tool cover from within a Go module context
+  cd "$ROOT_DIR/microservices-demo-main/src/checkoutservice"
+  go tool cover -html="$COVERAGE_DIR/results/combined_coverage.out" -o "$COVERAGE_DIR/results/combined_coverage.html" 2>/dev/null || {
+    echo "⚠️  Could not generate combined HTML report due to module path issues"
+    echo "📊 Generating individual HTML reports instead..."
+    
+    # Generate individual HTML reports for each service
+    cd "$COVERAGE_DIR"
+    for SERVICE in "${SERVICES[@]}"; do
+      service_coverage="results/${SERVICE}_coverage.out"
+      if [ -f "$service_coverage" ] && [ $(wc -l < "$service_coverage") -gt 1 ]; then
+        cd "$ROOT_DIR/microservices-demo-main/src/$SERVICE"
+        go tool cover -html="$COVERAGE_DIR/$service_coverage" -o "$COVERAGE_DIR/results/${SERVICE}_coverage.html" 2>/dev/null && {
+          echo "✅ Generated HTML report for $SERVICE: results/${SERVICE}_coverage.html"
+        } || {
+          echo "⚠️  Could not generate HTML report for $SERVICE"
+        }
+        cd "$COVERAGE_DIR"
+      fi
+    done
   }
 else
   echo "⚠️  Skipping HTML report generation (no meaningful coverage data)"
@@ -134,13 +153,23 @@ fi
 
 echo ""
 echo "✅ Coverage collection complete!"
-echo "📁 Combined coverage report: $COVERAGE_DIR/results/combined_coverage.html"
+if [ -f "$COVERAGE_DIR/results/combined_coverage.html" ]; then
+  echo "📁 Combined coverage report: $COVERAGE_DIR/results/combined_coverage.html"
+else
+  echo "📁 Individual coverage reports available in: $COVERAGE_DIR/results/"
+  for SERVICE in "${SERVICES[@]}"; do
+    if [ -f "$COVERAGE_DIR/results/${SERVICE}_coverage.html" ]; then
+      echo "   - ${SERVICE}_coverage.html"
+    fi
+  done
+fi
 echo "📁 Individual service coverage files: $COVERAGE_DIR/results/"
 
 # Generate summary for each service
 echo ""
 echo "📋 Individual Service Coverage:"
 echo "==============================="
+cd "$COVERAGE_DIR"
 for SERVICE in "${SERVICES[@]}"; do
   coverage_file="results/${SERVICE}_coverage.out"
   if [ -f "$coverage_file" ]; then
@@ -151,7 +180,10 @@ for SERVICE in "${SERVICES[@]}"; do
     grep -v "/genproto/" "$coverage_file" | tail -n +2 >> "$filtered_file" 2>/dev/null || true
     
     if [ $(wc -l < "$filtered_file") -gt 1 ]; then
-      go tool cover -func="$filtered_file" 2>/dev/null | tail -1 || echo "   No meaningful coverage data (likely only generated code)"
+      # Run from the service directory for proper module context
+      cd "$ROOT_DIR/microservices-demo-main/src/$SERVICE"
+      go tool cover -func="$COVERAGE_DIR/$filtered_file" 2>/dev/null | tail -1 || echo "   No meaningful coverage data (likely only generated code)"
+      cd "$COVERAGE_DIR"
     else
       echo "   No testable code found (only generated code)"
     fi
