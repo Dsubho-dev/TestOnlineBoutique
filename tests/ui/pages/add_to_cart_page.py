@@ -5,28 +5,38 @@ from .base_page import BasePage
 class AddToCartPage(BasePage):
     """Page object for add to cart functionality on the Online Boutique."""
 
-    # More specific selectors for Online Boutique application
-    PRODUCT_CARD = ".product-card, .product"
-    ADD_TO_CART_BTN = "button[type='submit'], .btn-primary, input[type='submit']"
-    CART_COUNT = ".cart-size, .cart-count, [data-cy='cart-count']"
-    PRODUCT_LIST = ".products-container, .product-list"
+    # Updated selectors for actual Online Boutique application
+    PRODUCT_CARD = ".hot-product-card"
+    PRODUCT_LINK = ".hot-product-card a"
+    ADD_TO_CART_BTN = "button[type='submit'], .btn, input[type='submit']"
+    CART_COUNT = ".cart-size, .cart-count, #cart-count, .cart span"
+    PRODUCT_LIST = ".products-container, .product-list, .hot-products"
     LOADING_INDICATOR = ".loading, .spinner"
 
     def add_first_product_to_cart(self):
-        """Click the 'Add to cart' button of the first product."""
+        """Navigate to first product and add it to cart."""
         # Wait for products to load
         self.wait_for_products_to_load()
         
-        # Find the first product and its add to cart button
-        selector = f"{self.PRODUCT_CARD}:first-child {self.ADD_TO_CART_BTN}"
+        # Click on the first product to navigate to product detail page
+        product_link_selector = f"{self.PRODUCT_CARD}:first-child {self.PRODUCT_LINK}"
         try:
-            self.click(selector)
+            self.click(product_link_selector)
+            
+            # On product detail page, find and click add to cart button
+            # Wait a bit for page to load
+            import time
+            time.sleep(2)
+            
+            # Try to find add to cart button
+            self.click(self.ADD_TO_CART_BTN)
         except Exception as e:
-            # Fallback: try different selectors
+            # Fallback: try clicking the product card directly or any button
             fallback_selectors = [
-                f"{self.PRODUCT_CARD}:first-of-type {self.ADD_TO_CART_BTN}",
-                f"{self.PRODUCT_CARD}:nth-child(1) {self.ADD_TO_CART_BTN}",
-                f"{self.ADD_TO_CART_BTN}:first-of-type"
+                f"{self.PRODUCT_CARD}:first-child",  # Click product card directly
+                "button",  # Any button
+                "input[type='submit']",  # Any submit input
+                "a[href*='cart']"  # Any cart link
             ]
             for fallback in fallback_selectors:
                 try:
