@@ -58,4 +58,4 @@ def driver():
 @pytest.fixture(scope="session")
 def base_url():
     """Base URL for the application."""
-    return os.getenv("BASE_URL", "http://localhost:8080")
+    return os.getenv("BASE_URL", "http://localhost:8081")
