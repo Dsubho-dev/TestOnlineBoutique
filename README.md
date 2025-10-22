@@ -8,8 +8,10 @@ A comprehensive test framework to deploy and test microservices with both API an
 - pip (Python package installer)
 - Git
 
-## Setup Instructions
+## Infra Setup Instructions
+For Infrastructure Setup, Refer to Developers Guide [here](docs/DeveloperGuide.md)
 
+## Run Tests
 ### 1. Clone the Repository
 
 ```bash
