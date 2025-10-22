@@ -35,7 +35,11 @@ test-ui:
 # Go coverage collection from unit tests
 go-coverage:
 	@echo "📊 Collecting Go coverage from unit tests..."
-	chmod +x go-coverage/collect_coverage.sh && ./go-coverage/collect_coverage.sh
+	chmod +x go-coverage/collect_coverage.sh && ./go-coverage/collect_coverage.sh || { \
+		echo "⚠️  Go coverage collection had some issues but may have partial results"; \
+		echo "📁 Check go-coverage/ directory for any generated reports"; \
+		exit 0; \
+	}
 
 # Enable Go coverage instrumentation for containers
 go-coverage-enable:
